@@ -1,2 +1,0 @@
-# FarmManagment
- SpringBoot Gradle project
