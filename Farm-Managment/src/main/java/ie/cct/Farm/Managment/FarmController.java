@@ -42,7 +42,7 @@ public class FarmController {
 	public SuccessResponse addAnimal(@RequestBody Animal animal) {
 
 		if (animal.getType().equalsIgnoreCase(cow)) {
-			animals.add(new Cow(animal.getType(),animal.getWeight()));
+			animals.add(new Cow(animal.getType(), animal.getWeight()));
 			animalPost = cow;
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else if (animal.getType().equalsIgnoreCase(pig)) {
@@ -54,7 +54,7 @@ public class FarmController {
 			animalPost = chicken;
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else {
-			return new SuccessResponse("Sorry, at moment " + animal.getType() + " is not allowed in system.");
+			return new SuccessResponse("Sorry, at moment " + animal.getType() + " is not inplemented in system yet.");
 		}
 
 	}
