@@ -47,7 +47,40 @@ public class Animal {
 //	creating a toString to Override it.
 	@Override
 	public String toString() {
-		return "Animal: " + type + "     Weight:  " + weight + " Kg.";
+		return "      Animal: " + type + "        Weight:  " + weight + " Kg."
+				+ "\n\n\n______________________________________________________________________________________________________________\n";
+	}
+
+// hashCode and equals
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Animal other = (Animal) obj;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		if (weight == null) {
+			if (other.weight != null)
+				return false;
+		} else if (!weight.equals(other.weight))
+			return false;
+		return true;
 	}
 
 }

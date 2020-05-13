@@ -1,4 +1,4 @@
-package ie.cct.Farm.Managment;
+package ie.cct.Farm.Managment.Actions;
 
 public class SuccessResponse {
 	

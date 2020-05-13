@@ -3,10 +3,13 @@ package ie.cct.Farm.Managment;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import ie.cct.Farm.Managment.Actions.AverageWeight;
+import ie.cct.Farm.Managment.Actions.SuccessResponse;
 import ie.cct.Farm.Managment.Animals.Animal;
 import ie.cct.Farm.Managment.Animals.Chicken;
 import ie.cct.Farm.Managment.Animals.Cow;
@@ -22,9 +25,12 @@ public class FarmController {
 
 //	declaring a List to storage the animals.
 	List<Animal> animals;
-
+	List<Animal> warehouse;
+	AverageWeight kg = new AverageWeight(0.00);
+	
 	public FarmController() {
 		animals = new ArrayList<Animal>();
+		warehouse = new ArrayList<Animal>();
 	}
 
 	/*
@@ -56,6 +62,39 @@ public class FarmController {
 		} else {
 			return new SuccessResponse("Sorry, at moment " + animal.getType() + " is not inplemented in system yet.");
 		}
-
 	}
+	
+	@GetMapping("average-weight")
+	public AverageWeight averageWeight() {
+		if (animals.size() == 0) {
+			throw new RuntimeException(" No animals found in the system");
+		}
+		kg = 0.00;
+		for (Animal animal: animals) {
+			kg = animal.getWeight();
+		}
+		kg = kg/animals.size();
+		retunr kg;
+		
+	}
+	
+	// method to verify if the animal has enough weight to be sold.
+	@GetMapping("a")
+	public void GoodToSell(Animal animal) {
+			
+		if (animal.getType().equalsIgnoreCase(cow) && animal.getWeight() >= 300.00) {
+			warehouse.add(new Cow(animal.getType(), animal.getWeight()));
+			
+			
+		} else if (animal.getType().equalsIgnoreCase(pig)  && animal.getWeight() >= 100.00) {
+			warehouse.add(new Pig(animal.getType(), animal.getWeight()));
+			
+			
+		} else if (animal.getType().equalsIgnoreCase(chicken) && animal.getWeight() >= 0.50) {
+			warehouse.add(new Chicken(animal.getType(), animal.getWeight()));
+			
+		}	
+			
+			
+		}
 }
