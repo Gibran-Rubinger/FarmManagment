@@ -1,7 +1,10 @@
 package ie.cct.Farm.Managment;
 
+import java.rmi.server.UID;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,24 +28,25 @@ public class FarmController {
 
 //	declaring a List to storage the animals.
 	List<Animal> animals;
-	List<Animal> warehouse;
+	Set<Animal> warehouse;
 	List<Animal> cows;
-	List<Animal> cowsForSale;
+	Set<Animal> cowsForSale;
 	List<Animal> pigs;
-	List<Animal> pigsForSale;
+	Set<Animal> pigsForSale;
 	List<Animal> chickens;
-	List<Animal> chickensForSale;
+	Set<Animal> chickensForSale;
+
 	AverageWeight kg = new AverageWeight(0.00);
 
 	public FarmController() {
 		animals = new ArrayList<Animal>();
-		warehouse = new ArrayList<Animal>();
+		warehouse = new HashSet<Animal>();
 		cows = new ArrayList<Animal>();
-		cowsForSale = new ArrayList<Animal>();
+		cowsForSale = new HashSet<Animal>();
 		pigs = new ArrayList<Animal>();
-		pigsForSale = new ArrayList<Animal>();
+		pigsForSale = new HashSet<Animal>();
 		chickens = new ArrayList<Animal>();
-		chickensForSale = new ArrayList<Animal>();
+		chickensForSale = new HashSet<Animal>();
 	}
 
 	/*
@@ -58,27 +62,24 @@ public class FarmController {
 	 */
 	@PostMapping("add-animal")
 	public SuccessResponse addAnimal(@RequestBody Animal animal) {
-		Integer cowIdMaker = 0;
-		Integer pigIdMaker = 0;
-		Integer chickenIdMaker = 0;
+
 		if (animal.getType().equalsIgnoreCase(cow)) {
-			animals.add(new Cow(animal.getType(), animal.getWeight(), animal.setId(cowIdMaker)));
-			cows.add(new Cow(animal.getType(), animal.getWeight(), animal.setId(cowIdMaker)));
+			animals.add(new Cow(animal.getType(), animal.getWeight(), animal.getId()));
+			cows.add(new Cow(animal.getType(), animal.getWeight(), animal.getId()));
 			animalPost = cow;
-			cowIdMaker++;
+
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else if (animal.getType().equalsIgnoreCase(pig)) {
-			animals.add(new Pig(animal.getType(), animal.getWeight(), animal.setId(pigIdMaker)));
-			pigs.add(new Pig(animal.getType(), animal.getWeight(), animal.setId(pigIdMaker)));
+			animals.add(new Pig(animal.getType(), animal.getWeight(), animal.getId()));
+			pigs.add(new Pig(animal.getType(), animal.getWeight(), animal.getId()));
 			animalPost = pig;
-			pigIdMaker++;
+
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else if (animal.getType().equalsIgnoreCase(chicken)) {
-			animals.add(new Chicken(animal.getType(), animal.getWeight(), animal.setId(chickenIdMaker)));
-			chickens.add(new Chicken(animal.getType(), animal.getWeight(), animal.setId(chickenIdMaker)));
-
+			animals.add(new Chicken(animal.getType(), animal.getWeight(), animal.getId()));
+			chickens.add(new Chicken(animal.getType(), animal.getWeight(), animal.getId()));
 			animalPost = chicken;
-			chickenIdMaker++;
+
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else {
 			return new SuccessResponse("Sorry, at moment " + animal.getType() + " is not inplemented in system yet.");
@@ -100,6 +101,9 @@ public class FarmController {
 //	}
 	@GetMapping("all-animals")
 	public SuccessResponse AllAnimals() {
+		for (Animal animal : animals) {
+			System.out.println(animal);
+		}
 		return new SuccessResponse("we have  " + animals.size() + "  animals register in the system.");
 	}
 
@@ -109,33 +113,16 @@ public class FarmController {
 
 		for (Animal animal : animals) {
 			if (animal.getType().equalsIgnoreCase(cow) && animal.getWeight() >= 300.00) {
-				for (Animal animalRegistred : warehouse) {
-					if (animal.getId() == animalRegistred.getId()) {
-						break;
-					} else {
-						warehouse.add(animal);
-						cowsForSale.add(animal);
-					}
-				}
-			} else if (animal.getType().equalsIgnoreCase(pig) && animal.getWeight() >= 100.00) {
-				for (Animal animalRegistred : warehouse) {
-					if (animal.getId() == animalRegistred.getId()) {
-						break;
-					} else {
-						warehouse.add(animal);
-						pigsForSale.add(animal);
-					}
-				}
-			} else if (animal.getType().equalsIgnoreCase(chicken) && animal.getWeight() >= 0.50) {
-				for (Animal animalRegistred : warehouse) {
-					if (animal.getId() == animalRegistred.getId()) {
-						break;
-					} else {
-						warehouse.add(animal);
-						chickensForSale.add(animal);
-					}
-				}
+				warehouse.add(animal);
+				cowsForSale.add(animal);
 
+			} else if (animal.getType().equalsIgnoreCase(pig) && animal.getWeight() >= 100.00) {
+				warehouse.add(animal);
+				pigsForSale.add(animal);
+
+			} else if (animal.getType().equalsIgnoreCase(chicken) && animal.getWeight() >= 0.50) {
+				warehouse.add(animal);
+				chickensForSale.add(animal);
 			}
 		}
 

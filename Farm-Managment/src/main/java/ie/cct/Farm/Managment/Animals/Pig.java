@@ -1,9 +1,11 @@
 package ie.cct.Farm.Managment.Animals;
 
+import java.rmi.server.UID;
+
 public class Pig extends Animal {
 
 //	creating a constructor to pass the encapsulated Attributes from animals as parameter.
-	public Pig(String type, Double weight, Integer id) {
+	public Pig(String type, Double weight, UID id) {
 		this.setType(type);
 		this.setWeight(weight);
 		this.setId(id);

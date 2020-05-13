@@ -1,14 +1,17 @@
 package ie.cct.Farm.Managment.Animals;
 
+import java.rmi.server.UID;
+
 public class Animal {
 
 //	defining the attributes as private.
 	private String type = "";
 	private Double weight = 0.00;
-	private Integer id = 0;
+//	private Integer id = 0;
 
+	UID id = new UID();
 //	Built a constructor to pass the attributes above as a parameter.
-	public Animal(String species, Double weight, Integer id) {
+	public Animal(String species, Double weight, UID id) {
 		this.type = species;
 		this.weight = weight;
 		this.id = id;
@@ -37,12 +40,12 @@ public class Animal {
 		this.weight = weight;
 	}
 
-	public Integer getId() {
+	public UID getId() {
 		return id;
 	}
 
-	public Integer setId(Integer id) {
-		return this.id = id;
+	public void setId(UID id) {
+		this.id = id;
 	}
 
 //	creating a toString to Override it.
