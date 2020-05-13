@@ -3,9 +3,9 @@ package ie.cct.Farm.Managment.Animals;
 public class Animal {
 
 //	defining the attributes as private.
-	protected String type = "";
-	protected Double weight = 0.00;
-	protected boolean weightTarget = false;
+	private String type = "";
+	private Double weight = 0.00;
+	private boolean weightTarget = false;
 
 //	Built a constructor to pass the attributes above as a parameter.
 	public Animal(String species, Double weight, boolean weightTarget) {
@@ -50,6 +50,8 @@ public class Animal {
 		return "      Animal: " + type + "        Weight:  " + weight + " Kg."
 				+ "\n\n\n______________________________________________________________________________________________________________\n";
 	}
+	
+
 
 // hashCode and equals
 	@Override

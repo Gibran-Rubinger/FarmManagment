@@ -93,6 +93,10 @@ public class FarmController {
 //		retunr kg;
 //
 //	}
+	@GetMapping("all-animals")
+	public SuccessResponse AllAnimals() {
+		return new SuccessResponse("we have  "+animals.size()+"  animals register in the system.");
+	}
 
 	// method to verify if the animal has enough weight to be sold.
 	@GetMapping("animals-for-sale")
@@ -117,9 +121,10 @@ public class FarmController {
 		Integer cowsFor$ = cowsForSale.size();
 		Integer pigsFor$ = pigsForSale.size();
 		Integer chickensFor$ = chickensForSale.size();
-		return new SuccessResponse("\n                        ANIMALS FOR SALE:" + "\n\n   At moment we have "
-				+ warehouse.size() + " for sale." + "\n\n   COWS - " + cowsFor$ + "\n\n   PIGS - " + pigsFor$
-				+ "\n\n   CHICKENS - " + chickensFor$);
+		return new SuccessResponse("                        ANIMALS FOR SALE:   At moment we have  "
+				+ warehouse.size() + "  animals for sale.   COWS - " + cowsFor$ + "   PIGS - " + pigsFor$
+				+ "   CHICKENS - " + chickensFor$);
+		
 
 	}
 }
