@@ -58,22 +58,27 @@ public class FarmController {
 	 */
 	@PostMapping("add-animal")
 	public SuccessResponse addAnimal(@RequestBody Animal animal) {
-
+		Integer cowIdMaker = 0;
+		Integer pigIdMaker = 0;
+		Integer chickenIdMaker = 0;
 		if (animal.getType().equalsIgnoreCase(cow)) {
-			animals.add(new Cow(animal.getType(), animal.getWeight()));
-			cows.add(new Cow(animal.getType(), animal.getWeight()));
+			animals.add(new Cow(animal.getType(), animal.getWeight(), animal.setId(cowIdMaker)));
+			cows.add(new Cow(animal.getType(), animal.getWeight(), animal.setId(cowIdMaker)));
 			animalPost = cow;
+			cowIdMaker++;
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else if (animal.getType().equalsIgnoreCase(pig)) {
-			animals.add(new Pig(animal.getType(), animal.getWeight()));
-			pigs.add(new Pig(animal.getType(), animal.getWeight()));
+			animals.add(new Pig(animal.getType(), animal.getWeight(), animal.setId(pigIdMaker)));
+			pigs.add(new Pig(animal.getType(), animal.getWeight(), animal.setId(pigIdMaker)));
 			animalPost = pig;
+			pigIdMaker++;
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else if (animal.getType().equalsIgnoreCase(chicken)) {
-			animals.add(new Chicken(animal.getType(), animal.getWeight()));
-			chickens.add(new Chicken(animal.getType(), animal.getWeight()));
+			animals.add(new Chicken(animal.getType(), animal.getWeight(), animal.setId(chickenIdMaker)));
+			chickens.add(new Chicken(animal.getType(), animal.getWeight(), animal.setId(chickenIdMaker)));
 
 			animalPost = chicken;
+			chickenIdMaker++;
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else {
 			return new SuccessResponse("Sorry, at moment " + animal.getType() + " is not inplemented in system yet.");
@@ -95,7 +100,7 @@ public class FarmController {
 //	}
 	@GetMapping("all-animals")
 	public SuccessResponse AllAnimals() {
-		return new SuccessResponse("we have  "+animals.size()+"  animals register in the system.");
+		return new SuccessResponse("we have  " + animals.size() + "  animals register in the system.");
 	}
 
 	// method to verify if the animal has enough weight to be sold.
@@ -104,27 +109,42 @@ public class FarmController {
 
 		for (Animal animal : animals) {
 			if (animal.getType().equalsIgnoreCase(cow) && animal.getWeight() >= 300.00) {
-				warehouse.add(new Cow(animal.getType(), animal.getWeight()));
-				cowsForSale.add(new Cow(animal.getType(), animal.getWeight()));
-
+				for (Animal animalRegistred : warehouse) {
+					if (animal.getId() == animalRegistred.getId()) {
+						break;
+					} else {
+						warehouse.add(animal);
+						cowsForSale.add(animal);
+					}
+				}
 			} else if (animal.getType().equalsIgnoreCase(pig) && animal.getWeight() >= 100.00) {
-				warehouse.add(new Pig(animal.getType(), animal.getWeight()));
-				pigsForSale.add(new Pig(animal.getType(), animal.getWeight()));
-
+				for (Animal animalRegistred : warehouse) {
+					if (animal.getId() == animalRegistred.getId()) {
+						break;
+					} else {
+						warehouse.add(animal);
+						pigsForSale.add(animal);
+					}
+				}
 			} else if (animal.getType().equalsIgnoreCase(chicken) && animal.getWeight() >= 0.50) {
-				warehouse.add(new Chicken(animal.getType(), animal.getWeight()));
-				chickensForSale.add(new Chicken(animal.getType(), animal.getWeight()));
-			}
+				for (Animal animalRegistred : warehouse) {
+					if (animal.getId() == animalRegistred.getId()) {
+						break;
+					} else {
+						warehouse.add(animal);
+						chickensForSale.add(animal);
+					}
+				}
 
+			}
 		}
 
 		Integer cowsFor$ = cowsForSale.size();
 		Integer pigsFor$ = pigsForSale.size();
 		Integer chickensFor$ = chickensForSale.size();
-		return new SuccessResponse("                        ANIMALS FOR SALE:   At moment we have  "
-				+ warehouse.size() + "  animals for sale.   COWS - " + cowsFor$ + "   PIGS - " + pigsFor$
-				+ "   CHICKENS - " + chickensFor$);
-		
+		return new SuccessResponse("                        ANIMALS FOR SALE:   At moment we have  " + warehouse.size()
+				+ "  animals for sale.   COWS - " + cowsFor$ + "   PIGS - " + pigsFor$ + "   CHICKENS - "
+				+ chickensFor$);
 
 	}
 }
