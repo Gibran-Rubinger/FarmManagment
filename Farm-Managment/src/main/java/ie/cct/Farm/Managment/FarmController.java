@@ -26,11 +26,23 @@ public class FarmController {
 //	declaring a List to storage the animals.
 	List<Animal> animals;
 	List<Animal> warehouse;
+	List<Animal> cows;
+	List<Animal> cowsForSale;
+	List<Animal> pigs;
+	List<Animal> pigsForSale;
+	List<Animal> chickens;
+	List<Animal> chickensForSale;
 	AverageWeight kg = new AverageWeight(0.00);
-	
+
 	public FarmController() {
 		animals = new ArrayList<Animal>();
 		warehouse = new ArrayList<Animal>();
+		cows = new ArrayList<Animal>();
+		cowsForSale = new ArrayList<Animal>();
+		pigs = new ArrayList<Animal>();
+		pigsForSale = new ArrayList<Animal>();
+		chickens = new ArrayList<Animal>();
+		chickensForSale = new ArrayList<Animal>();
 	}
 
 	/*
@@ -49,52 +61,65 @@ public class FarmController {
 
 		if (animal.getType().equalsIgnoreCase(cow)) {
 			animals.add(new Cow(animal.getType(), animal.getWeight()));
+			cows.add(new Cow(animal.getType(), animal.getWeight()));
 			animalPost = cow;
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else if (animal.getType().equalsIgnoreCase(pig)) {
 			animals.add(new Pig(animal.getType(), animal.getWeight()));
+			pigs.add(new Pig(animal.getType(), animal.getWeight()));
 			animalPost = pig;
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else if (animal.getType().equalsIgnoreCase(chicken)) {
 			animals.add(new Chicken(animal.getType(), animal.getWeight()));
+			chickens.add(new Chicken(animal.getType(), animal.getWeight()));
+
 			animalPost = chicken;
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else {
 			return new SuccessResponse("Sorry, at moment " + animal.getType() + " is not inplemented in system yet.");
 		}
 	}
-	
-	@GetMapping("average-weight")
-	public AverageWeight averageWeight() {
-		if (animals.size() == 0) {
-			throw new RuntimeException(" No animals found in the system");
-		}
-		kg = 0.00;
-		for (Animal animal: animals) {
-			kg = animal.getWeight();
-		}
-		kg = kg/animals.size();
-		retunr kg;
-		
-	}
-	
+
+//	@GetMapping("average-weight")
+//	public AverageWeight averageWeight() {
+//		if (animals.size() == 0) {
+//			throw new RuntimeException(" No animals found in the system");
+//		}
+//		kg = 0.00;
+//		for (Animal animal : animals) {
+//			kg = animal.getWeight();
+//		}
+//		kg = kg / animals.size();
+//		retunr kg;
+//
+//	}
+
 	// method to verify if the animal has enough weight to be sold.
-	@GetMapping("a")
-	public void GoodToSell(Animal animal) {
-			
-		if (animal.getType().equalsIgnoreCase(cow) && animal.getWeight() >= 300.00) {
-			warehouse.add(new Cow(animal.getType(), animal.getWeight()));
-			
-			
-		} else if (animal.getType().equalsIgnoreCase(pig)  && animal.getWeight() >= 100.00) {
-			warehouse.add(new Pig(animal.getType(), animal.getWeight()));
-			
-			
-		} else if (animal.getType().equalsIgnoreCase(chicken) && animal.getWeight() >= 0.50) {
-			warehouse.add(new Chicken(animal.getType(), animal.getWeight()));
-			
-		}	
-			
-			
+	@GetMapping("animals-for-sale")
+	public SuccessResponse GoodToSell() {
+
+		for (Animal animal : animals) {
+			if (animal.getType().equalsIgnoreCase(cow) && animal.getWeight() >= 300.00) {
+				warehouse.add(new Cow(animal.getType(), animal.getWeight()));
+				cowsForSale.add(new Cow(animal.getType(), animal.getWeight()));
+
+			} else if (animal.getType().equalsIgnoreCase(pig) && animal.getWeight() >= 100.00) {
+				warehouse.add(new Pig(animal.getType(), animal.getWeight()));
+				pigsForSale.add(new Pig(animal.getType(), animal.getWeight()));
+
+			} else if (animal.getType().equalsIgnoreCase(chicken) && animal.getWeight() >= 0.50) {
+				warehouse.add(new Chicken(animal.getType(), animal.getWeight()));
+				chickensForSale.add(new Chicken(animal.getType(), animal.getWeight()));
+			}
+
 		}
+
+		Integer cowsFor$ = cowsForSale.size();
+		Integer pigsFor$ = pigsForSale.size();
+		Integer chickensFor$ = chickensForSale.size();
+		return new SuccessResponse("\n                        ANIMALS FOR SALE:" + "\n\n   At moment we have "
+				+ warehouse.size() + " for sale." + "\n\n   COWS - " + cowsFor$ + "\n\n   PIGS - " + pigsFor$
+				+ "\n\n   CHICKENS - " + chickensFor$);
+
+	}
 }
