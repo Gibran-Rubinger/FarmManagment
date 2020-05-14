@@ -190,65 +190,93 @@ public class FarmController {
 
 		if (animals.size() == 0) {
 			throw new RuntimeException(" No animals found in the system");
-		} else {
+		} else if (cows.size() == 0) {
+			prospFullCows$ = 0.00;
+		}
+		else {
 			prospFullCows$ = 500.00;
+		
 			for (Animal animal : cows) {
 				animal.setPrice(prospFullCows$);
-				prospFullCows$ += prospFullCows$;
 			}
-			
-			// ______________________________________________________________________
-			cows$ = 500.00;
-			for (Animal animal : cowsForSale) {
-						animal.setPrice(cows$);
-						cows$ += cows$;
-			}
-			
-			// _____________________________________________________________________________
-			prospFullPigs$ = 250.00;
-			for (Animal animal : pigs) {
-						animal.setPrice(prospFullPigs$);
-						prospFullPigs$ += prospFullPigs$;
-			}
-			
-			// ______________________________________________________________________
-			pigs$ = 250.00;
-			for (Animal animal : pigsForSale) {
-						animal.setPrice(pigs$);
-						pigs$ += pigs$;
-			}
-			
-			// _____________________________________________________________________________
-			prospFullChickens$ = 5.00;
-			for (Animal animal : chickens) {
-						animal.setPrice(prospFullChickens$);
-						prospFullChickens$ += prospFullChickens$;			
-			}
-			
-			// ______________________________________________________________________
-			chickens$ = 5.00;
-			for (Animal animal : chickensForSale) { 
-						animal.setPrice(chickens$);
-						chickens$ += chickens$;
-			}
-			
-			// _____________________________________________________________________________
-
-			
-				prospFullPrice = prospFullChickens$ + prospFullPigs$ + prospFullCows$;
-				fullPrice = chickens$ + pigs$ + cows$;
-				percent = (fullPrice / prospFullPrice)*100; 
-			
-			// _____________________________________________________________________________
-			return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €"
-					+ cows$ + "   PIGS:  €" + pigs$ + "   CHICKENS:  €" + chickens$
-					+ "                                                                                            PROSPECTIVE PRICE  - when all the animals getting the correct weight    "
-					+ "   -  TOTAL SALE:  €"
-					+ prospFullPrice + " THIS IS "+percent+"% OVER.                   COWS:  €" + prospFullCows$ + "   PIGS:  €" + prospFullPigs$ + "   CHICKENS:  €"
-					+ prospFullChickens$);
+			prospFullCows$ = prospFullCows$ * cows.size();
 		}
 
+		// ______________________________________________________________________
+		
+		if (cowsForSale.size() == 0) {
+			cows$ = 0.00;
+		}else {
+			cows$ = 500.00;
+			for (Animal animal : cowsForSale) {
+				animal.setPrice(cows$);
+			}
+			cows$ = cows$ * cowsForSale.size();
+		}
+
+		// _____________________________________________________________________________
+		
+		if (pigs.size() == 0) {
+			prospFullPigs$ = 0.00;
+		}else {
+			prospFullPigs$ = 250.00;
+			for (Animal animal : pigs) {
+				animal.setPrice(prospFullPigs$);
+			}
+			prospFullPigs$ = prospFullPigs$ * pigs.size();
+		}
+
+		// ______________________________________________________________________
+		
+		if (pigsForSale.size() == 0) {
+			pigs$ = 0.00;
+		}else {
+			pigs$ = 250.00;
+			for (Animal animal : pigsForSale) {
+				animal.setPrice(pigs$);
+			}
+			pigs$ = pigs$ * pigsForSale.size();
+		}
+
+		// _____________________________________________________________________________
+		
+		if (chickens.size() == 0) {
+			prospFullChickens$ = 0.00;
+		}else {
+			prospFullChickens$ = 5.00;
+			for (Animal animal : chickens) {
+				animal.setPrice(prospFullChickens$);
+			}
+			prospFullChickens$ = prospFullChickens$ * chickens.size();
+		}
+
+		// ______________________________________________________________________
+		
+		if (chickensForSale.size() == 0) {
+			chickens$ = 0.00;
+		}else {
+			chickens$ = 5.00;
+			for (Animal animal : chickensForSale) {
+				animal.setPrice(chickens$);
+			}
+			chickens$ = chickens$ * chickensForSale.size();
+		}
+
+		// _____________________________________________________________________________
+
+		prospFullPrice = prospFullChickens$ + prospFullPigs$ + prospFullCows$;
+		fullPrice = chickens$ + pigs$ + cows$;
+		percent = (fullPrice / prospFullPrice) * 100;
+
+		// _____________________________________________________________________________
+		return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €" + cows$
+				+ "   PIGS:  €" + pigs$ + "   CHICKENS:  €" + chickens$
+				+ "                                                                                            PROSPECTIVE PRICE  - when all the animals getting the correct weight    "
+				+ "   -  TOTAL SALE:  €" + prospFullPrice + " THIS IS " + percent + "% OVER.                   COWS:  €"
+				+ prospFullCows$ + "   PIGS:  €" + prospFullPigs$ + "   CHICKENS:  €" + prospFullChickens$);
 	}
+
+	
 
 	@GetMapping("all-animals")
 	public SuccessResponse AllAnimals() {
