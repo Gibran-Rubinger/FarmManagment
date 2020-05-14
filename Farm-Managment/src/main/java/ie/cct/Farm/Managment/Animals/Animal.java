@@ -71,7 +71,7 @@ public Double getPrice() {
 	//	creating a toString to Override it.
 	@Override
 	public String toString() {
-		return "      ID: " + id +"       ANIMAL: " + type + "        WEIGHT:  " + weight + " Kg.        Price:  " + price + "         Price per Kg:  " + pricePerKg 
+		return "      ID: " + id +"       ANIMAL: " + type + "        WEIGHT:  " + weight + " Kg.        Price:  €" + price + "         Price per Kg:  €" + pricePerKg 
 				+ "\n\n\n___________________________________________________________________________________________________________________________________________\n";
 	}
 	// hashCode and equals

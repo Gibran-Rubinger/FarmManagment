@@ -41,6 +41,7 @@ public class FarmController {
 	private Double prospFullPigs$ = 0.00;
 	private Double chickens$ = 0.00;
 	private Double prospFullChickens$ = 0.00;
+	private Double percent = 0.00;
 
 //	declaring a List to storage the animals.
 	List<Animal> animals;
@@ -190,50 +191,61 @@ public class FarmController {
 		if (animals.size() == 0) {
 			throw new RuntimeException(" No animals found in the system");
 		} else {
-			for (Animal animal : animals) {
-				fullPrice = animal.getPrice();
-			}
-			// _____________________________________________________________________________
-			for (Animal animal : warehouse) {
-				prospFullPrice = animal.getPrice();
-			}
-			// _____________________________________________________________________________
+			prospFullCows$ = 500.00;
 			for (Animal animal : cows) {
-				averageKgAllCow = animal.getWeight();
+				animal.setPrice(prospFullCows$);
+				prospFullCows$ += prospFullCows$;
 			}
-			averageKgAllCow = averageKgAllCow / cows.size();
+			
 			// ______________________________________________________________________
+			cows$ = 500.00;
 			for (Animal animal : cowsForSale) {
-				averageKgCow$ = animal.getWeight();
+						animal.setPrice(cows$);
+						cows$ += cows$;
 			}
-			averageKgCow$ = averageKgCow$ / cowsForSale.size();
+			
 			// _____________________________________________________________________________
+			prospFullPigs$ = 250.00;
 			for (Animal animal : pigs) {
-				averageKgAllPig = animal.getWeight();
+						animal.setPrice(prospFullPigs$);
+						prospFullPigs$ += prospFullPigs$;
 			}
-			averageKgAllPig = averageKgAllPig / pigs.size();
+			
 			// ______________________________________________________________________
+			pigs$ = 250.00;
 			for (Animal animal : pigsForSale) {
-				averageKgPig$ = animal.getWeight();
+						animal.setPrice(pigs$);
+						pigs$ += pigs$;
 			}
-			averageKgPig$ = averageKgPig$ / pigsForSale.size();
+			
 			// _____________________________________________________________________________
+			prospFullChickens$ = 5.00;
 			for (Animal animal : chickens) {
-				averageKgAllChicken = animal.getWeight();
+						animal.setPrice(prospFullChickens$);
+						prospFullChickens$ += prospFullChickens$;			
 			}
-			averageKgAllChicken = averageKgAllChicken / chickens.size();
+			
 			// ______________________________________________________________________
-			for (Animal animal : chickensForSale) {
-				averageKgChicken$ = animal.getWeight();
+			chickens$ = 5.00;
+			for (Animal animal : chickensForSale) { 
+						animal.setPrice(chickens$);
+						chickens$ += chickens$;
 			}
-			averageKgChicken$ = averageKgChicken$ / chickensForSale.size();
+			
 			// _____________________________________________________________________________
 
-			return new SuccessResponse("   AVERAGE WEIGHT:    - All Animals:  " + averageKgAllFarm + "   COWS:  "
-					+ averageKgAllCow + "   PIGS:  " + averageKgAllPig + "   CHICKENS:  " + averageKgAllChicken
-					+ "                                                                                            - ALL ANIMALS FOR SALE:  "
-					+ averageKgAllFarm$ + "   COWS:  " + averageKgCow$ + "   PIGS:  " + averageKgPig$ + "   CHICKENS:  "
-					+ averageKgChicken$);
+			
+				prospFullPrice = prospFullChickens$ + prospFullPigs$ + prospFullCows$;
+				fullPrice = chickens$ + pigs$ + cows$;
+				percent = (fullPrice / prospFullPrice)*100; 
+			
+			// _____________________________________________________________________________
+			return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €"
+					+ cows$ + "   PIGS:  €" + pigs$ + "   CHICKENS:  €" + chickens$
+					+ "                                                                                            PROSPECTIVE PRICE  - when all the animals getting the correct weight    "
+					+ "   -  TOTAL SALE:  €"
+					+ prospFullPrice + " THIS IS "+percent+"% OVER.                   COWS:  €" + prospFullCows$ + "   PIGS:  €" + prospFullPigs$ + "   CHICKENS:  €"
+					+ prospFullChickens$);
 		}
 
 	}
