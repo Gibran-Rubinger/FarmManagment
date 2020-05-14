@@ -7,14 +7,17 @@ public class Animal {
 //	defining the attributes as private.
 	private String type = "";
 	private Double weight = 0.00;
-//	private Integer id = 0;
+	private Double price = 0.00;
+	private Double pricePerKg = 0.00;
 
 	UID id = new UID();
 //	Built a constructor to pass the attributes above as a parameter.
-	public Animal(String species, Double weight, UID id) {
+	public Animal(String species, Double weight, UID id, Double price, Double pricePerKg) {
 		this.type = species;
 		this.weight = weight;
 		this.id = id;
+		this.price = price;
+		this.pricePerKg = pricePerKg;
 
 	}
 
@@ -47,20 +50,38 @@ public class Animal {
 	public void setId(UID id) {
 		this.id = id;
 	}
+	
 
-//	creating a toString to Override it.
-	@Override
-	public String toString() {
-		return "      ID: " + id +"       ANIMAL: " + type + "        WEIGHT:  " + weight + " Kg."
-				+ "\n\n\n______________________________________________________________________________________________________________\n";
+public Double getPrice() {
+		return price;
 	}
 
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Double getPricePerKg() {
+		return pricePerKg;
+	}
+
+	public void setPricePerKg(Double pricePerKg) {
+		this.pricePerKg = pricePerKg;
+	}
+
+	//	creating a toString to Override it.
+	@Override
+	public String toString() {
+		return "      ID: " + id +"       ANIMAL: " + type + "        WEIGHT:  " + weight + " Kg.        Price:  " + price + "         Price per Kg:  " + pricePerKg 
+				+ "\n\n\n___________________________________________________________________________________________________________________________________________\n";
+	}
 	// hashCode and equals
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((price == null) ? 0 : price.hashCode());
+		result = prime * result + ((pricePerKg == null) ? 0 : pricePerKg.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
 		return result;
@@ -80,6 +101,16 @@ public class Animal {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (price == null) {
+			if (other.price != null)
+				return false;
+		} else if (!price.equals(other.price))
+			return false;
+		if (pricePerKg == null) {
+			if (other.pricePerKg != null)
+				return false;
+		} else if (!pricePerKg.equals(other.pricePerKg))
+			return false;
 		if (type == null) {
 			if (other.type != null)
 				return false;
@@ -92,5 +123,5 @@ public class Animal {
 			return false;
 		return true;
 	}
-
-}
+	
+	}

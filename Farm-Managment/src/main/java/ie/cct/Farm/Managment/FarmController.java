@@ -33,6 +33,15 @@ public class FarmController {
 	private Double averageKgAllChicken = 0.00;
 	private Double averageKgChicken$ = 0.00;
 
+	private Double fullPrice = 0.00;
+	private Double prospFullPrice = 0.00;
+	private Double cows$ = 0.00;
+	private Double prospFullCows$ = 0.00;
+	private Double pigs$ = 0.00;
+	private Double prospFullPigs$ = 0.00;
+	private Double chickens$ = 0.00;
+	private Double prospFullChickens$ = 0.00;
+
 //	declaring a List to storage the animals.
 	List<Animal> animals;
 	Set<Animal> warehouse;
@@ -66,7 +75,7 @@ public class FarmController {
 	 * javascrip across the endpoints.
 	 */
 	@PostMapping("add-animal")
-	public SuccessResponse addAnimal(@RequestBody Animal animal) {
+	public SuccessResponse AddAnimal(@RequestBody Animal animal) {
 
 		if (animal.getType().equalsIgnoreCase(cow)) {
 			animals.add(new Cow(animal.getType(), animal.getWeight(), animal.getId()));
@@ -120,7 +129,7 @@ public class FarmController {
 	}
 
 	@GetMapping("average-weight")
-	public SuccessResponse averageWeight() {
+	public SuccessResponse AverageWeight() {
 
 		if (animals.size() == 0) {
 			throw new RuntimeException(" No animals found in the system");
@@ -166,9 +175,63 @@ public class FarmController {
 			averageKgChicken$ = averageKgChicken$ / chickensForSale.size();
 //_____________________________________________________________________________
 
+			return new SuccessResponse("   AVERAGE WEIGHT:    - All Animals:  " + averageKgAllFarm + " Kg.   COWS:  "
+					+ averageKgAllCow + " Kg.   PIGS:  " + averageKgAllPig + " Kg.   CHICKENS:  " + averageKgAllChicken
+					+ " Kg."
+					+ "                                                                                                         - ALL ANIMALS FOR SALE:  "
+					+ averageKgAllFarm$ + " Kg.   COWS:  " + averageKgCow$ + " Kg.   PIGS:  " + averageKgPig$
+					+ "   CHICKENS:  " + averageKgChicken$ + " Kg.");
+		}
+	}
+
+	@GetMapping("current-price")
+	public SuccessResponse CurrentPrice() {
+
+		if (animals.size() == 0) {
+			throw new RuntimeException(" No animals found in the system");
+		} else {
+			for (Animal animal : animals) {
+				fullPrice = animal.getPrice();
+			}
+			// _____________________________________________________________________________
+			for (Animal animal : warehouse) {
+				prospFullPrice = animal.getPrice();
+			}
+			// _____________________________________________________________________________
+			for (Animal animal : cows) {
+				averageKgAllCow = animal.getWeight();
+			}
+			averageKgAllCow = averageKgAllCow / cows.size();
+			// ______________________________________________________________________
+			for (Animal animal : cowsForSale) {
+				averageKgCow$ = animal.getWeight();
+			}
+			averageKgCow$ = averageKgCow$ / cowsForSale.size();
+			// _____________________________________________________________________________
+			for (Animal animal : pigs) {
+				averageKgAllPig = animal.getWeight();
+			}
+			averageKgAllPig = averageKgAllPig / pigs.size();
+			// ______________________________________________________________________
+			for (Animal animal : pigsForSale) {
+				averageKgPig$ = animal.getWeight();
+			}
+			averageKgPig$ = averageKgPig$ / pigsForSale.size();
+			// _____________________________________________________________________________
+			for (Animal animal : chickens) {
+				averageKgAllChicken = animal.getWeight();
+			}
+			averageKgAllChicken = averageKgAllChicken / chickens.size();
+			// ______________________________________________________________________
+			for (Animal animal : chickensForSale) {
+				averageKgChicken$ = animal.getWeight();
+			}
+			averageKgChicken$ = averageKgChicken$ / chickensForSale.size();
+			// _____________________________________________________________________________
+
 			return new SuccessResponse("   AVERAGE WEIGHT:    - All Animals:  " + averageKgAllFarm + "   COWS:  "
 					+ averageKgAllCow + "   PIGS:  " + averageKgAllPig + "   CHICKENS:  " + averageKgAllChicken
-					+ "                                                                        - ALL ANIMALS FOR SALE:  "
+					+ "                                                                                            - ALL ANIMALS FOR SALE:  "
 					+ averageKgAllFarm$ + "   COWS:  " + averageKgCow$ + "   PIGS:  " + averageKgPig$ + "   CHICKENS:  "
 					+ averageKgChicken$);
 		}

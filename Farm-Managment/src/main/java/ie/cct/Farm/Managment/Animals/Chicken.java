@@ -14,8 +14,7 @@ public class Chicken extends Animal {
 //	creating a toString to Override it.
 	@Override
 	public String toString() {
-		return "      ID: " + getId() +"       ANIMAL: " + getType() + "        WEIGHT:  " + getWeight() + " Kg."
-				+ "\n\n\n______________________________________________________________________________________________________________\n";
+		return "      ID: " + getId() +"       ANIMAL: " + getType() + "        WEIGHT:  " + getWeight() + " Kg.        Price:  " + getPrice() + "         Price per Kg:  " + getPricePerKg() 
+				+ "\n\n\n___________________________________________________________________________________________________________________________________________\n";
 	}
-
 }
