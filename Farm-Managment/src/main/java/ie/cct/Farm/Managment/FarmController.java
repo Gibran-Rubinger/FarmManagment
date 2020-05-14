@@ -1,6 +1,5 @@
 package ie.cct.Farm.Managment;
 
-import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ie.cct.Farm.Managment.Actions.AverageWeight;
 import ie.cct.Farm.Managment.Actions.SuccessResponse;
 import ie.cct.Farm.Managment.Animals.Animal;
 import ie.cct.Farm.Managment.Animals.Chicken;
@@ -26,6 +24,15 @@ public class FarmController {
 	private String chicken = "Chicken";
 	private String animalPost = "";
 
+	private Double averageKgAllFarm = 0.00;
+	private Double averageKgAllFarm$ = 0.00;
+	private Double averageKgAllCow = 0.00;
+	private Double averageKgCow$ = 0.00;
+	private Double averageKgAllPig = 0.00;
+	private Double averageKgPig$ = 0.00;
+	private Double averageKgAllChicken = 0.00;
+	private Double averageKgChicken$ = 0.00;
+
 //	declaring a List to storage the animals.
 	List<Animal> animals;
 	Set<Animal> warehouse;
@@ -35,8 +42,6 @@ public class FarmController {
 	Set<Animal> pigsForSale;
 	List<Animal> chickens;
 	Set<Animal> chickensForSale;
-
-	AverageWeight kg = new AverageWeight(0.00);
 
 	public FarmController() {
 		animals = new ArrayList<Animal>();
@@ -86,27 +91,6 @@ public class FarmController {
 		}
 	}
 
-//	@GetMapping("average-weight")
-//	public AverageWeight averageWeight() {
-//		if (animals.size() == 0) {
-//			throw new RuntimeException(" No animals found in the system");
-//		}
-//		kg = 0.00;
-//		for (Animal animal : animals) {
-//			kg = animal.getWeight();
-//		}
-//		kg = kg / animals.size();
-//		retunr kg;
-//
-//	}
-	@GetMapping("all-animals")
-	public SuccessResponse AllAnimals() {
-		for (Animal animal : animals) {
-			System.out.println(animal);
-		}
-		return new SuccessResponse("we have  " + animals.size() + "  animals register in the system.");
-	}
-
 	// method to verify if the animal has enough weight to be sold.
 	@GetMapping("animals-for-sale")
 	public SuccessResponse GoodToSell() {
@@ -134,4 +118,84 @@ public class FarmController {
 				+ chickensFor$);
 
 	}
+
+	@GetMapping("average-weight")
+	public SuccessResponse averageWeight() {
+
+		if (animals.size() == 0) {
+			throw new RuntimeException(" No animals found in the system");
+		} else {
+			for (Animal animal : animals) {
+				averageKgAllFarm = animal.getWeight();
+			}
+			averageKgAllFarm = averageKgAllFarm / animals.size();
+//_____________________________________________________________________________
+			for (Animal animal : warehouse) {
+				averageKgAllFarm$ = animal.getWeight();
+			}
+			averageKgAllFarm$ = averageKgAllFarm$ / warehouse.size();
+//_____________________________________________________________________________
+			for (Animal animal : cows) {
+				averageKgAllCow = animal.getWeight();
+			}
+			averageKgAllCow = averageKgAllCow / cows.size();
+			// ______________________________________________________________________
+			for (Animal animal : cowsForSale) {
+				averageKgCow$ = animal.getWeight();
+			}
+			averageKgCow$ = averageKgCow$ / cowsForSale.size();
+//_____________________________________________________________________________
+			for (Animal animal : pigs) {
+				averageKgAllPig = animal.getWeight();
+			}
+			averageKgAllPig = averageKgAllPig / pigs.size();
+			// ______________________________________________________________________
+			for (Animal animal : pigsForSale) {
+				averageKgPig$ = animal.getWeight();
+			}
+			averageKgPig$ = averageKgPig$ / pigsForSale.size();
+//_____________________________________________________________________________
+			for (Animal animal : chickens) {
+				averageKgAllChicken = animal.getWeight();
+			}
+			averageKgAllChicken = averageKgAllChicken / chickens.size();
+			// ______________________________________________________________________
+			for (Animal animal : chickensForSale) {
+				averageKgChicken$ = animal.getWeight();
+			}
+			averageKgChicken$ = averageKgChicken$ / chickensForSale.size();
+//_____________________________________________________________________________
+
+			return new SuccessResponse("   AVERAGE WEIGHT:    - All Animals:  " + averageKgAllFarm + "   COWS:  "
+					+ averageKgAllCow + "   PIGS:  " + averageKgAllPig + "   CHICKENS:  " + averageKgAllChicken
+					+ "                                                                        - ALL ANIMALS FOR SALE:  "
+					+ averageKgAllFarm$ + "   COWS:  " + averageKgCow$ + "   PIGS:  " + averageKgPig$ + "   CHICKENS:  "
+					+ averageKgChicken$);
+		}
+
+	}
+
+	@GetMapping("all-animals")
+	public SuccessResponse AllAnimals() {
+		System.out.println(
+				"\n\n______________________________________________________________________________________________________________\n\n");
+		System.out.println("\n\n\n\n\n\n\n                                           STARTING SESSION  ");
+		System.out.println(
+				"\n\n______________________________________________________________________________________________________________\n\n");
+
+		for (Animal animal : animals) {
+			System.out.println(animal);
+		}
+		System.out.println(
+				"\n\n\n\n\n\n\n\n______________________________________________________________________________________________________________\n");
+		System.out
+				.println("                                         AT MOMENT:   " + animals.size() + "  ANIMALS ADDED");
+		System.out.println("\n                            COWS:   " + cows.size() + "               PIGS:  "
+				+ pigs.size() + "               CHICKENS:  " + chickens.size());
+		System.out.println(
+				"\n______________________________________________________________________________________________________________\n\n");
+
+		return new SuccessResponse("we have  " + animals.size() + "  animals register in the system.");
+	}
+
 }
