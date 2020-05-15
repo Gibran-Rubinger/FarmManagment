@@ -192,10 +192,9 @@ public class FarmController {
 			throw new RuntimeException(" No animals found in the system");
 		} else if (cows.size() == 0) {
 			prospFullCows$ = 0.00;
-		}
-		else {
+		} else {
 			prospFullCows$ = 500.00;
-		
+
 			for (Animal animal : cows) {
 				animal.setPrice(prospFullCows$);
 			}
@@ -203,10 +202,10 @@ public class FarmController {
 		}
 
 		// ______________________________________________________________________
-		
+
 		if (cowsForSale.size() == 0) {
 			cows$ = 0.00;
-		}else {
+		} else {
 			cows$ = 500.00;
 			for (Animal animal : cowsForSale) {
 				animal.setPrice(cows$);
@@ -215,10 +214,10 @@ public class FarmController {
 		}
 
 		// _____________________________________________________________________________
-		
+
 		if (pigs.size() == 0) {
 			prospFullPigs$ = 0.00;
-		}else {
+		} else {
 			prospFullPigs$ = 250.00;
 			for (Animal animal : pigs) {
 				animal.setPrice(prospFullPigs$);
@@ -227,10 +226,10 @@ public class FarmController {
 		}
 
 		// ______________________________________________________________________
-		
+
 		if (pigsForSale.size() == 0) {
 			pigs$ = 0.00;
-		}else {
+		} else {
 			pigs$ = 250.00;
 			for (Animal animal : pigsForSale) {
 				animal.setPrice(pigs$);
@@ -239,10 +238,10 @@ public class FarmController {
 		}
 
 		// _____________________________________________________________________________
-		
+
 		if (chickens.size() == 0) {
 			prospFullChickens$ = 0.00;
-		}else {
+		} else {
 			prospFullChickens$ = 5.00;
 			for (Animal animal : chickens) {
 				animal.setPrice(prospFullChickens$);
@@ -251,10 +250,10 @@ public class FarmController {
 		}
 
 		// ______________________________________________________________________
-		
+
 		if (chickensForSale.size() == 0) {
 			chickens$ = 0.00;
-		}else {
+		} else {
 			chickens$ = 5.00;
 			for (Animal animal : chickensForSale) {
 				animal.setPrice(chickens$);
@@ -262,6 +261,7 @@ public class FarmController {
 			chickens$ = chickens$ * chickensForSale.size();
 		}
 
+		
 		// _____________________________________________________________________________
 
 		prospFullPrice = prospFullChickens$ + prospFullPigs$ + prospFullCows$;
@@ -271,21 +271,40 @@ public class FarmController {
 		// _____________________________________________________________________________
 		return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €" + cows$
 				+ "   PIGS:  €" + pigs$ + "   CHICKENS:  €" + chickens$
-				+ "                                                                                            PROSPECTIVE PRICE  - when all the animals getting the correct weight    "
+				+ "                                                                                            PROSPECTIVE PRICE  - when all the animals have got the correct weight    "
 				+ "   -  TOTAL SALE:  €" + prospFullPrice + " THIS IS " + percent + "% OVER.                   COWS:  €"
 				+ prospFullCows$ + "   PIGS:  €" + prospFullPigs$ + "   CHICKENS:  €" + prospFullChickens$);
 	}
-
-	
 
 	@GetMapping("all-animals")
 	public SuccessResponse AllAnimals() {
 		System.out.println(
 				"\n\n______________________________________________________________________________________________________________\n\n");
-		System.out.println("\n\n\n\n\n\n\n                                           STARTING SESSION  ");
+		System.out.println("\n\n\n\n\n                                             STARTING SESSION  ");
 		System.out.println(
 				"\n\n______________________________________________________________________________________________________________\n\n");
+//____________________________________________________
+//		setting the standard price
+		if (animals.size() == 0) {
+			chickens$ = 0.00;
+			pigs$ = 0.00;
+			cows$ = 0.00;
+		} else {
+			chickens$ = 5.00;
+			pigs$ = 250.00;
+			cows$ = 500.00;
+			for (Animal animal : animals) {
+				if (animal.getType().equalsIgnoreCase(cow)) {
+					animal.setPrice(cows$);
+				} else if (animal.getType().equalsIgnoreCase(pig)) {
+					animal.setPrice(pigs$);
+				}else if (animal.getType().equalsIgnoreCase(chicken)) {
+					animal.setPrice(chickens$);
+				}
+			}
+		}
 
+//		_________________________________________________
 		for (Animal animal : animals) {
 			System.out.println(animal);
 		}
@@ -295,6 +314,10 @@ public class FarmController {
 				.println("                                         AT MOMENT:   " + animals.size() + "  ANIMALS ADDED");
 		System.out.println("\n                            COWS:   " + cows.size() + "               PIGS:  "
 				+ pigs.size() + "               CHICKENS:  " + chickens.size());
+		System.out.println("\n PROSPECTION PRICE -        COWS:   €" + prospFullCows$ + "               PIGS:  €"
+				+ prospFullPigs$ + "               CHICKENS:  €" + prospFullChickens$);
+		System.out.println("\n SALES PRICE -        COWS:   €" + prospFullCows$ + "               PIGS:  €"
+				+ prospFullPigs$ + "               CHICKENS:  €" + prospFullChickens$);
 		System.out.println(
 				"\n______________________________________________________________________________________________________________\n\n");
 
