@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ie.cct.Farm.Managment.Actions.SuccessResponse;
@@ -35,14 +36,25 @@ public class FarmController {
 
 	private Double fullPrice = 0.00;
 	private Double prospFullPrice = 0.00;
-	private Double cows$ = 0.00;
-	private Double prospFullCows$ = 0.00;
-	private Double pigs$ = 0.00;
-	private Double prospFullPigs$ = 0.00;
-	private Double chickens$ = 0.00;
-	private Double prospFullChickens$ = 0.00;
-	private Double percent = 0.00;
 
+	private Double cows$ = 0.00;
+	private Double pigs$ = 0.00;
+	private Double chickens$ = 0.00;
+
+	private Double cows$P = 0.00;
+	private Double pigs$P = 0.00;
+	private Double chickens$P = 0.00;
+
+	private Double cows$cP = 0.00;
+	private Double pigs$cP = 0.00;
+	private Double chickens$cP = 0.00;
+
+	private Double percent = 0.00;
+	private Double totalP = 0.00;
+	private Double totalcP = 0.00;
+	
+	private Double global = 0.00;
+	private Double globalC = 0.00;
 //	declaring a List to storage the animals.
 	List<Animal> animals;
 	Set<Animal> warehouse;
@@ -187,22 +199,23 @@ public class FarmController {
 
 	@GetMapping("current-price")
 	public SuccessResponse CurrentPrice() {
-
+//___________________________________________________________________________
+//		Prospect price when the all cow have got the over 299Kg per animal.
 		if (animals.size() == 0) {
 			throw new RuntimeException(" No animals found in the system");
 		} else if (cows.size() == 0) {
-			prospFullCows$ = 0.00;
+			cows$P = 0.00;
 		} else {
-			prospFullCows$ = 500.00;
+			cows$P = 500.00;
 
 			for (Animal animal : cows) {
-				animal.setPrice(prospFullCows$);
+				animal.setPrice(cows$P);
 			}
-			prospFullCows$ = prospFullCows$ * cows.size();
+			cows$P = cows$P * cows.size();
 		}
 
 		// ______________________________________________________________________
-
+//		price for all cow over 299Kg per animal.
 		if (cowsForSale.size() == 0) {
 			cows$ = 0.00;
 		} else {
@@ -214,19 +227,20 @@ public class FarmController {
 		}
 
 		// _____________________________________________________________________________
+//		Prospect price when the all pigs have got the over 99.99Kg per animal.
 
 		if (pigs.size() == 0) {
-			prospFullPigs$ = 0.00;
+			pigs$P = 0.00;
 		} else {
-			prospFullPigs$ = 250.00;
+			pigs$P = 250.00;
 			for (Animal animal : pigs) {
-				animal.setPrice(prospFullPigs$);
+				animal.setPrice(pigs$P);
 			}
-			prospFullPigs$ = prospFullPigs$ * pigs.size();
+			pigs$P = pigs$P * pigs.size();
 		}
 
 		// ______________________________________________________________________
-
+//		price for all pigs over 99.99Kg per animal.
 		if (pigsForSale.size() == 0) {
 			pigs$ = 0.00;
 		} else {
@@ -238,18 +252,19 @@ public class FarmController {
 		}
 
 		// _____________________________________________________________________________
-
+//		Prospect price when the all chickens have got the over 0.499Kg per animal.
 		if (chickens.size() == 0) {
-			prospFullChickens$ = 0.00;
+			chickens$P = 0.00;
 		} else {
-			prospFullChickens$ = 5.00;
+			chickens$P = 5.00;
 			for (Animal animal : chickens) {
-				animal.setPrice(prospFullChickens$);
+				animal.setPrice(chickens$P);
 			}
-			prospFullChickens$ = prospFullChickens$ * chickens.size();
+			chickens$P = chickens$P * chickens.size();
 		}
 
 		// ______________________________________________________________________
+//		price for all chickens over 0.499Kg per animal.
 
 		if (chickensForSale.size() == 0) {
 			chickens$ = 0.00;
@@ -261,19 +276,134 @@ public class FarmController {
 			chickens$ = chickens$ * chickensForSale.size();
 		}
 
-		
 		// _____________________________________________________________________________
-
-		prospFullPrice = prospFullChickens$ + prospFullPigs$ + prospFullCows$;
+//      generate the full farm price able to sell right now   and full farm prospect price.
+		prospFullPrice = chickens$P + pigs$P + cows$P;
 		fullPrice = chickens$ + pigs$ + cows$;
-		percent = (fullPrice / prospFullPrice) * 100;
+		totalP =  prospFullPrice - fullPrice;
+		percent = (totalP / fullPrice) * 100;
+		global = fullPrice + totalP;
 
 		// _____________________________________________________________________________
 		return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €" + cows$
 				+ "   PIGS:  €" + pigs$ + "   CHICKENS:  €" + chickens$
-				+ "                                                                                            PROSPECTIVE PRICE  - when all the animals have got the correct weight    "
-				+ "   -  TOTAL SALE:  €" + prospFullPrice + " THIS IS " + percent + "% OVER.                   COWS:  €"
-				+ prospFullCows$ + "   PIGS:  €" + prospFullPigs$ + "   CHICKENS:  €" + prospFullChickens$);
+				+ "                                                                                            PROSPECTIVE PRICE  - when the  other animals have got the correct weight    "
+				+ "   -  TOTAL PROSPECTIVE SALE:  €" + totalP + " THIS IS " + percent
+				+ " % MORE.              ON TOTAL: "+ global +"      COWS:  €" + cows$P + "   PIGS:  €" + pigs$P + "   CHICKENS:  €"
+				+ chickens$P);
+	}
+
+	@GetMapping("custom-price")
+	public SuccessResponse CustomPrice(@RequestParam(required = true) Double cowPrice,
+			@RequestParam(required = true) Double pigPrice, @RequestParam(required = true) Double chickenPrice) {
+		// ___________________________________________________________________________
+
+//		Prospect  custom price when the all cow have got the over 299Kg per animal.		
+		if (animals.size() == 0) {
+			throw new RuntimeException(" No animals found in the system");
+		} else if (cows.size() == 0) {
+			cows$cP = 0.00;
+		} else {
+			cows$cP = cowPrice;
+			for (Animal animal : cows) {
+				animal.setPrice(0.00);
+			}
+			for (Animal animal : cows) {
+				animal.setPrice(cows$cP);
+			}
+			cows$cP = cows$cP * cows.size();
+		}
+
+		// ______________________________________________________________________
+//		custom price for all cow over 299Kg per animal.
+		if (cowsForSale.size() == 0) {
+			cowPrice = 0.00;
+		} else {
+			for (Animal animal : cowsForSale) {
+				animal.setPrice(0.00);
+			}
+			for (Animal animal : cowsForSale) {
+				animal.setPrice(cowPrice);
+			}
+			cowPrice = cowPrice * cowsForSale.size();
+		}
+
+		// _____________________________________________________________________________
+//		Prospect custom price when the all pigs have got the over 99.99Kg per animal.
+
+		if (pigs.size() == 0) {
+			pigPrice = 0.00;
+		} else {
+			pigs$cP = pigPrice;
+			for (Animal animal : pigs) {
+				animal.setPrice(0.00);
+			}
+			for (Animal animal : pigs) {
+				animal.setPrice(pigs$cP);
+			}
+			pigs$cP = pigs$cP * pigs.size();
+		}
+
+		// ______________________________________________________________________
+//		custom price for all pigs over 99.99Kg per animal.
+		if (pigsForSale.size() == 0) {
+			pigPrice = 0.00;
+		} else {
+			for (Animal animal : pigsForSale) {
+				animal.setPrice(0.00);
+			}
+			for (Animal animal : pigsForSale) {
+				animal.setPrice(pigPrice);
+			}
+			pigPrice = pigPrice * pigsForSale.size();
+		}
+
+		// _____________________________________________________________________________
+//		Prospect custom price when the all chickens have got the over 0.499Kg per animal.
+		if (chickens.size() == 0) {
+			chickenPrice = 0.00;
+		} else {
+			chickens$cP = chickenPrice;
+			for (Animal animal : chickens) {
+				animal.setPrice(0.00);
+			}
+			for (Animal animal : chickens) {
+				animal.setPrice(chickens$cP);
+			}
+			chickens$cP = chickens$cP * chickens.size();
+		}
+
+		// ______________________________________________________________________
+//		custom price for all chickens over 0.499Kg per animal.
+
+		if (chickensForSale.size() == 0) {
+			chickenPrice = 0.00;
+		} else {
+			for (Animal animal : chickensForSale) {
+				animal.setPrice(0.00);
+			}
+			for (Animal animal : chickensForSale) {
+				animal.setPrice(chickenPrice);
+			}
+			chickenPrice = chickenPrice * chickensForSale.size();
+		}
+
+		// _____________________________________________________________________________
+//      generate the full farm price able to sell right now   and full farm prospect price.
+		prospFullPrice = chickens$cP + pigs$cP + cows$cP;
+		fullPrice = cowPrice + pigPrice + chickenPrice;
+		totalcP =  prospFullPrice - fullPrice;
+		percent = (totalcP / fullPrice) * 100;
+		globalC = fullPrice + totalcP;
+
+		// _____________________________________________________________________________
+		return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €" + cowPrice
+				+ "   PIGS:  €" + pigPrice + "   CHICKENS:  €" + chickenPrice
+				+ "                                                                                            PROSPECTIVE PRICE  - when the  other animals have got the correct weight    "
+				+ "   -  TOTAL PROSPECTIVE SALE:  €" + totalcP + " THIS IS " + percent
+				+ " % MORE.              ON TOTAL: "+ globalC +"      COWS:  €" + cows$cP + "   PIGS:  €" + pigs$cP + "   CHICKENS:  €"
+				+ chickens$cP);
+
 	}
 
 	@GetMapping("all-animals")
@@ -298,7 +428,7 @@ public class FarmController {
 					animal.setPrice(cows$);
 				} else if (animal.getType().equalsIgnoreCase(pig)) {
 					animal.setPrice(pigs$);
-				}else if (animal.getType().equalsIgnoreCase(chicken)) {
+				} else if (animal.getType().equalsIgnoreCase(chicken)) {
 					animal.setPrice(chickens$);
 				}
 			}
@@ -314,10 +444,10 @@ public class FarmController {
 				.println("                                         AT MOMENT:   " + animals.size() + "  ANIMALS ADDED");
 		System.out.println("\n                            COWS:   " + cows.size() + "               PIGS:  "
 				+ pigs.size() + "               CHICKENS:  " + chickens.size());
-		System.out.println("\n PROSPECTION PRICE -        COWS:   €" + prospFullCows$ + "               PIGS:  €"
-				+ prospFullPigs$ + "               CHICKENS:  €" + prospFullChickens$);
-		System.out.println("\n SALES PRICE -        COWS:   €" + prospFullCows$ + "               PIGS:  €"
-				+ prospFullPigs$ + "               CHICKENS:  €" + prospFullChickens$);
+		System.out.println("\n PROSPECTION PRICE -        COWS:   €" + cows$ + "               PIGS:  €" + pigs$
+				+ "               CHICKENS:  €" + chickens$);
+		System.out.println("\n SALES PRICE -        COWS:   €" + cows$ + "               PIGS:  €" + pigs$
+				+ "               CHICKENS:  €" + chickens$);
 		System.out.println(
 				"\n______________________________________________________________________________________________________________\n\n");
 
