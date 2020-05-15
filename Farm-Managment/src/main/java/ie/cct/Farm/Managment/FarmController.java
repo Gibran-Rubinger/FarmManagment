@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ie.cct.Farm.Managment.Actions.NotFoundException;
 import ie.cct.Farm.Managment.Actions.SuccessResponse;
 import ie.cct.Farm.Managment.Animals.Animal;
 import ie.cct.Farm.Managment.Animals.Chicken;
@@ -145,7 +146,7 @@ public class FarmController {
 	public SuccessResponse AverageWeight() {
 
 		if (animals.size() == 0) {
-			throw new RuntimeException(" No animals found in the system");
+			throw new NotFoundException(" No animals found in the system");
 		} else {
 			for (Animal animal : animals) {
 				averageKgAllFarm = animal.getWeight();
@@ -202,7 +203,7 @@ public class FarmController {
 //___________________________________________________________________________
 //		Prospect price when the all cow have got the over 299Kg per animal.
 		if (animals.size() == 0) {
-			throw new RuntimeException(" No animals found in the system");
+			throw new NotFoundException(" No animals found in the system");
 		} else if (cows.size() == 0) {
 			cows$P = 0.00;
 		} else {
@@ -300,7 +301,7 @@ public class FarmController {
 
 //		Prospect  custom price when the all cow have got the over 299Kg per animal.		
 		if (animals.size() == 0) {
-			throw new RuntimeException(" No animals found in the system");
+			throw new NotFoundException(" No animals found in the system");
 		} else if (cows.size() == 0) {
 			cows$cP = 0.00;
 		} else {
