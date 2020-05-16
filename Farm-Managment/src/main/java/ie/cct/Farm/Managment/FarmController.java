@@ -56,6 +56,10 @@ public class FarmController {
 	
 	private Double global = 0.00;
 	private Double globalC = 0.00;
+	
+	private Double customPriceCow = 0.00;
+	private Double customPricePig = 0.00;
+	private Double customPriceChicken = 0.00;
 //	declaring a List to storage the animals.
 	List<Animal> animals;
 	Set<Animal> warehouse;
@@ -396,6 +400,10 @@ public class FarmController {
 		totalcP =  prospFullPrice - fullPrice;
 		percent = (totalcP / fullPrice) * 100;
 		globalC = fullPrice + totalcP;
+		
+		customPriceCow = cowPrice;
+		customPricePig = pigPrice;
+		customPriceChicken = chickenPrice;
 
 		// _____________________________________________________________________________
 		return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €" + cowPrice
@@ -420,10 +428,11 @@ public class FarmController {
 			chickens$ = 0.00;
 			pigs$ = 0.00;
 			cows$ = 0.00;
+			customPriceCow = 0.00;
+			customPriceChicken = 0.00;
+			customPricePig = 0.00;
 		} else {
-			chickens$ = 5.00;
-			pigs$ = 250.00;
-			cows$ = 500.00;
+			
 			for (Animal animal : animals) {
 				if (animal.getType().equalsIgnoreCase(cow)) {
 					animal.setPrice(cows$);
@@ -445,10 +454,13 @@ public class FarmController {
 				.println("                                         AT MOMENT:   " + animals.size() + "  ANIMALS ADDED");
 		System.out.println("\n                            COWS:   " + cows.size() + "               PIGS:  "
 				+ pigs.size() + "               CHICKENS:  " + chickens.size());
-		System.out.println("\n PROSPECTION PRICE -        COWS:   €" + cows$ + "               PIGS:  €" + pigs$
+		System.out.println("                                      POSSIBLE RENTABILITY ");
+		System.out.println("\n                            COWS:   " + cowsForSale.size() + "               PIGS:  "
+				+ pigsForSale.size() + "               CHICKENS:  " + chickensForSale.size());
+		System.out.println("\n TOTAL STANDARD PRICE BY:        COWS:   €" + cows$ + "               PIGS:  €" + pigs$
 				+ "               CHICKENS:  €" + chickens$);
-		System.out.println("\n SALES PRICE -        COWS:   €" + cows$ + "               PIGS:  €" + pigs$
-				+ "               CHICKENS:  €" + chickens$);
+		System.out.println("\n TOTAL CUSTOM PRICE BY:        COWS:   €" + customPriceCow + "               PIGS:  €" + customPricePig
+				+ "               CHICKENS:  €" + customPriceChicken);
 		System.out.println(
 				"\n______________________________________________________________________________________________________________\n\n");
 
