@@ -53,31 +53,31 @@ public class FarmController {
 	private Double percent = 0.00;
 	private Double totalP = 0.00;
 	private Double totalcP = 0.00;
-	
+
 	private Double global = 0.00;
 	private Double globalC = 0.00;
-	
+
 	private Double customPriceCow = 0.00;
 	private Double customPricePig = 0.00;
 	private Double customPriceChicken = 0.00;
 //	declaring a List to storage the animals.
 	List<Animal> animals;
-	Set<Animal> warehouse;
-	List<Animal> cows;
+	List<Animal> warehouse;
+	Set<Animal> cows;
 	Set<Animal> cowsForSale;
-	List<Animal> pigs;
+	Set<Animal> pigs;
 	Set<Animal> pigsForSale;
-	List<Animal> chickens;
+	Set<Animal> chickens;
 	Set<Animal> chickensForSale;
 
 	public FarmController() {
 		animals = new ArrayList<Animal>();
-		warehouse = new HashSet<Animal>();
-		cows = new ArrayList<Animal>();
+		warehouse = new ArrayList<Animal>();
+		cows = new HashSet<Animal>();
 		cowsForSale = new HashSet<Animal>();
-		pigs = new ArrayList<Animal>();
+		pigs = new HashSet<Animal>();
 		pigsForSale = new HashSet<Animal>();
-		chickens = new ArrayList<Animal>();
+		chickens = new HashSet<Animal>();
 		chickensForSale = new HashSet<Animal>();
 	}
 
@@ -94,7 +94,6 @@ public class FarmController {
 	 */
 	@PostMapping("add-animal")
 	public SuccessResponse AddAnimal(@RequestBody Animal animal) {
-
 		if (animal.getType().equalsIgnoreCase(cow)) {
 			animals.add(new Cow(animal.getType(), animal.getWeight(), animal.getId()));
 			cows.add(new Cow(animal.getType(), animal.getWeight(), animal.getId()));
@@ -140,7 +139,7 @@ public class FarmController {
 		Integer cowsFor$ = cowsForSale.size();
 		Integer pigsFor$ = pigsForSale.size();
 		Integer chickensFor$ = chickensForSale.size();
-		return new SuccessResponse("                        ANIMALS FOR SALE:   At moment we have  " + warehouse.size()
+		return new SuccessResponse("           ANIMALS FOR SALE:   At moment we have  " + warehouse.size()
 				+ "  animals for sale.   COWS - " + cowsFor$ + "   PIGS - " + pigsFor$ + "   CHICKENS - "
 				+ chickensFor$);
 
@@ -149,56 +148,54 @@ public class FarmController {
 	@GetMapping("average-weight")
 	public SuccessResponse AverageWeight() {
 
-		if (animals.size() == 0) {
+		if (animals.size() == 0 && warehouse.size() ==0) {
 			throw new NotFoundException(" No animals found in the system");
 		} else {
 			for (Animal animal : animals) {
-				averageKgAllFarm = animal.getWeight();
+				averageKgAllFarm += animal.getWeight();
 			}
 			averageKgAllFarm = averageKgAllFarm / animals.size();
 //_____________________________________________________________________________
 			for (Animal animal : warehouse) {
-				averageKgAllFarm$ = animal.getWeight();
+				averageKgAllFarm$ += animal.getWeight();
 			}
 			averageKgAllFarm$ = averageKgAllFarm$ / warehouse.size();
 //_____________________________________________________________________________
 			for (Animal animal : cows) {
-				averageKgAllCow = animal.getWeight();
+				averageKgAllCow += animal.getWeight();
 			}
 			averageKgAllCow = averageKgAllCow / cows.size();
 			// ______________________________________________________________________
 			for (Animal animal : cowsForSale) {
-				averageKgCow$ = animal.getWeight();
+				averageKgCow$ += animal.getWeight();
 			}
 			averageKgCow$ = averageKgCow$ / cowsForSale.size();
 //_____________________________________________________________________________
 			for (Animal animal : pigs) {
-				averageKgAllPig = animal.getWeight();
+				averageKgAllPig += animal.getWeight();
 			}
 			averageKgAllPig = averageKgAllPig / pigs.size();
 			// ______________________________________________________________________
 			for (Animal animal : pigsForSale) {
-				averageKgPig$ = animal.getWeight();
+				averageKgPig$ += animal.getWeight();
 			}
 			averageKgPig$ = averageKgPig$ / pigsForSale.size();
 //_____________________________________________________________________________
 			for (Animal animal : chickens) {
-				averageKgAllChicken = animal.getWeight();
+				averageKgAllChicken += animal.getWeight();
 			}
 			averageKgAllChicken = averageKgAllChicken / chickens.size();
 			// ______________________________________________________________________
 			for (Animal animal : chickensForSale) {
-				averageKgChicken$ = animal.getWeight();
+				averageKgChicken$ += animal.getWeight();
 			}
 			averageKgChicken$ = averageKgChicken$ / chickensForSale.size();
 //_____________________________________________________________________________
 
 			return new SuccessResponse("   AVERAGE WEIGHT:    - All Animals:  " + averageKgAllFarm + " Kg.   COWS:  "
 					+ averageKgAllCow + " Kg.   PIGS:  " + averageKgAllPig + " Kg.   CHICKENS:  " + averageKgAllChicken
-					+ " Kg."
-					+ "                                                                                                         - ALL ANIMALS FOR SALE:  "
-					+ averageKgAllFarm$ + " Kg.   COWS:  " + averageKgCow$ + " Kg.   PIGS:  " + averageKgPig$
-					+ "   CHICKENS:  " + averageKgChicken$ + " Kg.");
+					+ " Kg.      ALL ANIMALS FOR SALE:  " + averageKgAllFarm$ + " Kg.   COWS:  " + averageKgCow$
+					+ " Kg.   PIGS:  " + averageKgPig$ + "   CHICKENS:  " + averageKgChicken$ + " Kg.");
 		}
 	}
 
@@ -285,7 +282,7 @@ public class FarmController {
 //      generate the full farm price able to sell right now   and full farm prospect price.
 		prospFullPrice = chickens$P + pigs$P + cows$P;
 		fullPrice = chickens$ + pigs$ + cows$;
-		totalP =  prospFullPrice - fullPrice;
+		totalP = prospFullPrice - fullPrice;
 		percent = (totalP / fullPrice) * 100;
 		global = fullPrice + totalP;
 
@@ -294,8 +291,8 @@ public class FarmController {
 				+ "   PIGS:  €" + pigs$ + "   CHICKENS:  €" + chickens$
 				+ "                                                                                            PROSPECTIVE PRICE  - when the  other animals have got the correct weight    "
 				+ "   -  TOTAL PROSPECTIVE SALE:  €" + totalP + " THIS IS " + percent
-				+ " % MORE.              ON TOTAL: "+ global +"      COWS:  €" + cows$P + "   PIGS:  €" + pigs$P + "   CHICKENS:  €"
-				+ chickens$P);
+				+ " % MORE.              ON TOTAL: " + global + "      COWS:  €" + cows$P + "   PIGS:  €" + pigs$P
+				+ "   CHICKENS:  €" + chickens$P);
 	}
 
 	@GetMapping("custom-price")
@@ -397,10 +394,10 @@ public class FarmController {
 //      generate the full farm price able to sell right now   and full farm prospect price.
 		prospFullPrice = chickens$cP + pigs$cP + cows$cP;
 		fullPrice = cowPrice + pigPrice + chickenPrice;
-		totalcP =  prospFullPrice - fullPrice;
+		totalcP = prospFullPrice - fullPrice;
 		percent = (totalcP / fullPrice) * 100;
 		globalC = fullPrice + totalcP;
-		
+
 		customPriceCow = cowPrice;
 		customPricePig = pigPrice;
 		customPriceChicken = chickenPrice;
@@ -410,8 +407,8 @@ public class FarmController {
 				+ "   PIGS:  €" + pigPrice + "   CHICKENS:  €" + chickenPrice
 				+ "                                                                                            PROSPECTIVE PRICE  - when the  other animals have got the correct weight    "
 				+ "   -  TOTAL PROSPECTIVE SALE:  €" + totalcP + " THIS IS " + percent
-				+ " % MORE.              ON TOTAL: "+ globalC +"      COWS:  €" + cows$cP + "   PIGS:  €" + pigs$cP + "   CHICKENS:  €"
-				+ chickens$cP);
+				+ " % MORE.              ON TOTAL: " + globalC + "      COWS:  €" + cows$cP + "   PIGS:  €" + pigs$cP
+				+ "   CHICKENS:  €" + chickens$cP);
 
 	}
 
@@ -432,7 +429,7 @@ public class FarmController {
 			customPriceChicken = 0.00;
 			customPricePig = 0.00;
 		} else {
-			
+
 			for (Animal animal : animals) {
 				if (animal.getType().equalsIgnoreCase(cow)) {
 					animal.setPrice(cows$);
@@ -459,8 +456,8 @@ public class FarmController {
 				+ pigsForSale.size() + "               CHICKENS:  " + chickensForSale.size());
 		System.out.println("\n TOTAL STANDARD PRICE BY:        COWS:   €" + cows$ + "               PIGS:  €" + pigs$
 				+ "               CHICKENS:  €" + chickens$);
-		System.out.println("\n TOTAL CUSTOM PRICE BY:        COWS:   €" + customPriceCow + "               PIGS:  €" + customPricePig
-				+ "               CHICKENS:  €" + customPriceChicken);
+		System.out.println("\n TOTAL CUSTOM PRICE BY:        COWS:   €" + customPriceCow + "               PIGS:  €"
+				+ customPricePig + "               CHICKENS:  €" + customPriceChicken);
 		System.out.println(
 				"\n______________________________________________________________________________________________________________\n\n");
 
