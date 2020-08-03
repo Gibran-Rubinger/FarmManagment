@@ -1,8 +1,8 @@
 package ie.cct.Farm.Managment;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,24 +60,24 @@ public class FarmController {
 	private Double customPricePig = 0.00;
 	private Double customPriceChicken = 0.00;
 //	declaring a List to storage the animals.
-	ArrayList<Animal> animals;
-	ArrayList<Animal> warehouse;
-	ArrayList<Animal> cows;
-	ArrayList<Animal> cowsForSale;
-	ArrayList<Animal> pigs;
-	ArrayList<Animal> pigsForSale;
-	ArrayList<Animal> chickens;
-	ArrayList<Animal> chickensForSale;
+	List<Animal> animals;
+	List<Animal> warehouse;
+	Set<Animal> cows;
+	Set<Animal> cowsForSale;
+	Set<Animal> pigs;
+	Set<Animal> pigsForSale;
+	Set<Animal> chickens;
+	Set<Animal> chickensForSale;
 
 	public FarmController() {
 		animals = new ArrayList<Animal>();
 		warehouse = new ArrayList<Animal>();
-		cows = new ArrayList<Animal>();
-		cowsForSale = new ArrayList<Animal>();
-		pigs = new ArrayList<Animal>();
-		pigsForSale = new ArrayList<Animal>();
-		chickens = new ArrayList<Animal>();
-		chickensForSale = new ArrayList<Animal>();
+		cows = new HashSet<Animal>();
+		cowsForSale = new HashSet<Animal>();
+		pigs = new HashSet<Animal>();
+		pigsForSale = new HashSet<Animal>();
+		chickens = new HashSet<Animal>();
+		chickensForSale = new HashSet<Animal>();
 	}
 
 	/*
@@ -119,7 +119,6 @@ public class FarmController {
 	@GetMapping("animals-for-sale")
 	public SuccessResponse GoodToSell() {
 
-		refreshSales();
 		for (Animal animal : animals) {
 			if (animal.getType().equalsIgnoreCase(cow) && animal.getWeight() >= 300.00) {
 				warehouse.add(animal);
@@ -143,52 +142,58 @@ public class FarmController {
 				+ chickensFor$);
 
 	}
-	public void refreshSales() {
-		warehouse.clear();
-		cowsForSale.clear();
-		pigsForSale.clear();
-		chickensForSale.clear();
-	}
 
 	@GetMapping("average-weight")
 	public SuccessResponse AverageWeight() {
-		
+
+<<<<<<< HEAD
+		if (animals.size() == 0 && warehouse.size() ==0) {
+			throw new NotFoundException(" No animals found in the system");
+=======
 		if (animals.size() == 0) {
 			throw new RuntimeException(" No animals found in the system");
+>>>>>>> parent of 39312eb... custom error class
 		} else {
-			refresh();
 			for (Animal animal : animals) {
 				averageKgAllFarm += animal.getWeight();
 			}
 			averageKgAllFarm = averageKgAllFarm / animals.size();
+//_____________________________________________________________________________
 			for (Animal animal : warehouse) {
 				averageKgAllFarm$ += animal.getWeight();
 			}
 			averageKgAllFarm$ = averageKgAllFarm$ / warehouse.size();
+//_____________________________________________________________________________
 			for (Animal animal : cows) {
 				averageKgAllCow += animal.getWeight();
 			}
 			averageKgAllCow = averageKgAllCow / cows.size();
+			// ______________________________________________________________________
 			for (Animal animal : cowsForSale) {
 				averageKgCow$ += animal.getWeight();
 			}
 			averageKgCow$ = averageKgCow$ / cowsForSale.size();
+//_____________________________________________________________________________
 			for (Animal animal : pigs) {
 				averageKgAllPig += animal.getWeight();
 			}
 			averageKgAllPig = averageKgAllPig / pigs.size();
+			// ______________________________________________________________________
 			for (Animal animal : pigsForSale) {
 				averageKgPig$ += animal.getWeight();
 			}
 			averageKgPig$ = averageKgPig$ / pigsForSale.size();
+//_____________________________________________________________________________
 			for (Animal animal : chickens) {
 				averageKgAllChicken += animal.getWeight();
 			}
 			averageKgAllChicken = averageKgAllChicken / chickens.size();
+			// ______________________________________________________________________
 			for (Animal animal : chickensForSale) {
 				averageKgChicken$ += animal.getWeight();
 			}
 			averageKgChicken$ = averageKgChicken$ / chickensForSale.size();
+//_____________________________________________________________________________
 
 			return new SuccessResponse("   AVERAGE WEIGHT:    - All Animals:  " + averageKgAllFarm + " Kg.   COWS:  "
 					+ averageKgAllCow + " Kg.   PIGS:  " + averageKgAllPig + " Kg.   CHICKENS:  " + averageKgAllChicken
@@ -197,32 +202,25 @@ public class FarmController {
 		}
 	}
 
-	public void refresh() {
-		averageKgAllFarm = 0.00;
-		averageKgAllFarm$ = 0.00;
-		averageKgAllCow = 0.00;
-		averageKgCow$ = 0.00;
-		averageKgAllPig = 0.00;
-		averageKgPig$ = 0.00;
-		averageKgAllChicken = 0.00;
-		averageKgChicken$ = 0.00;
-	}
-
 	@GetMapping("current-price")
 	public SuccessResponse CurrentPrice() {
-
+//___________________________________________________________________________
+//		Prospect price when the all cow have got the over 299Kg per animal.
 		if (animals.size() == 0) {
 			throw new RuntimeException(" No animals found in the system");
 		} else if (cows.size() == 0) {
 			cows$P = 0.00;
 		} else {
 			cows$P = 500.00;
+
 			for (Animal animal : cows) {
 				animal.setPrice(cows$P);
 			}
 			cows$P = cows$P * cows.size();
 		}
 
+		// ______________________________________________________________________
+//		price for all cow over 299Kg per animal.
 		if (cowsForSale.size() == 0) {
 			cows$ = 0.00;
 		} else {
@@ -232,6 +230,10 @@ public class FarmController {
 			}
 			cows$ = cows$ * cowsForSale.size();
 		}
+
+		// _____________________________________________________________________________
+//		Prospect price when the all pigs have got the over 99.99Kg per animal.
+
 		if (pigs.size() == 0) {
 			pigs$P = 0.00;
 		} else {
@@ -242,6 +244,8 @@ public class FarmController {
 			pigs$P = pigs$P * pigs.size();
 		}
 
+		// ______________________________________________________________________
+//		price for all pigs over 99.99Kg per animal.
 		if (pigsForSale.size() == 0) {
 			pigs$ = 0.00;
 		} else {
@@ -251,6 +255,9 @@ public class FarmController {
 			}
 			pigs$ = pigs$ * pigsForSale.size();
 		}
+
+		// _____________________________________________________________________________
+//		Prospect price when the all chickens have got the over 0.499Kg per animal.
 		if (chickens.size() == 0) {
 			chickens$P = 0.00;
 		} else {
@@ -260,6 +267,9 @@ public class FarmController {
 			}
 			chickens$P = chickens$P * chickens.size();
 		}
+
+		// ______________________________________________________________________
+//		price for all chickens over 0.499Kg per animal.
 
 		if (chickensForSale.size() == 0) {
 			chickens$ = 0.00;
@@ -271,15 +281,18 @@ public class FarmController {
 			chickens$ = chickens$ * chickensForSale.size();
 		}
 
+		// _____________________________________________________________________________
+//      generate the full farm price able to sell right now   and full farm prospect price.
 		prospFullPrice = chickens$P + pigs$P + cows$P;
 		fullPrice = chickens$ + pigs$ + cows$;
 		totalP = prospFullPrice - fullPrice;
 		percent = (totalP / fullPrice) * 100;
 		global = fullPrice + totalP;
 
+		// _____________________________________________________________________________
 		return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €" + cows$
 				+ "   PIGS:  €" + pigs$ + "   CHICKENS:  €" + chickens$
-				+ "       PROSPECTIVE PRICE  - when the  other animals have got the correct weight    "
+				+ "                                                                                            PROSPECTIVE PRICE  - when the  other animals have got the correct weight    "
 				+ "   -  TOTAL PROSPECTIVE SALE:  €" + totalP + " THIS IS " + percent
 				+ " % MORE.              ON TOTAL: " + global + "      COWS:  €" + cows$P + "   PIGS:  €" + pigs$P
 				+ "   CHICKENS:  €" + chickens$P);
@@ -288,7 +301,9 @@ public class FarmController {
 	@GetMapping("custom-price")
 	public SuccessResponse CustomPrice(@RequestParam(required = true) Double cowPrice,
 			@RequestParam(required = true) Double pigPrice, @RequestParam(required = true) Double chickenPrice) {
+		// ___________________________________________________________________________
 
+//		Prospect  custom price when the all cow have got the over 299Kg per animal.		
 		if (animals.size() == 0) {
 			throw new RuntimeException(" No animals found in the system");
 		} else if (cows.size() == 0) {
@@ -304,6 +319,8 @@ public class FarmController {
 			cows$cP = cows$cP * cows.size();
 		}
 
+		// ______________________________________________________________________
+//		custom price for all cow over 299Kg per animal.
 		if (cowsForSale.size() == 0) {
 			cowPrice = 0.00;
 		} else {
@@ -315,6 +332,9 @@ public class FarmController {
 			}
 			cowPrice = cowPrice * cowsForSale.size();
 		}
+
+		// _____________________________________________________________________________
+//		Prospect custom price when the all pigs have got the over 99.99Kg per animal.
 
 		if (pigs.size() == 0) {
 			pigPrice = 0.00;
@@ -329,6 +349,8 @@ public class FarmController {
 			pigs$cP = pigs$cP * pigs.size();
 		}
 
+		// ______________________________________________________________________
+//		custom price for all pigs over 99.99Kg per animal.
 		if (pigsForSale.size() == 0) {
 			pigPrice = 0.00;
 		} else {
@@ -341,6 +363,8 @@ public class FarmController {
 			pigPrice = pigPrice * pigsForSale.size();
 		}
 
+		// _____________________________________________________________________________
+//		Prospect custom price when the all chickens have got the over 0.499Kg per animal.
 		if (chickens.size() == 0) {
 			chickenPrice = 0.00;
 		} else {
@@ -354,6 +378,9 @@ public class FarmController {
 			chickens$cP = chickens$cP * chickens.size();
 		}
 
+		// ______________________________________________________________________
+//		custom price for all chickens over 0.499Kg per animal.
+
 		if (chickensForSale.size() == 0) {
 			chickenPrice = 0.00;
 		} else {
@@ -366,6 +393,8 @@ public class FarmController {
 			chickenPrice = chickenPrice * chickensForSale.size();
 		}
 
+		// _____________________________________________________________________________
+//      generate the full farm price able to sell right now   and full farm prospect price.
 		prospFullPrice = chickens$cP + pigs$cP + cows$cP;
 		fullPrice = cowPrice + pigPrice + chickenPrice;
 		totalcP = prospFullPrice - fullPrice;
@@ -376,9 +405,10 @@ public class FarmController {
 		customPricePig = pigPrice;
 		customPriceChicken = chickenPrice;
 
+		// _____________________________________________________________________________
 		return new SuccessResponse("   FULL PRICE:    - All Animals:  €" + fullPrice + "   COWS:  €" + cowPrice
 				+ "   PIGS:  €" + pigPrice + "   CHICKENS:  €" + chickenPrice
-				+ "      PROSPECTIVE PRICE  - when the  other animals have got the correct weight    "
+				+ "                                                                                            PROSPECTIVE PRICE  - when the  other animals have got the correct weight    "
 				+ "   -  TOTAL PROSPECTIVE SALE:  €" + totalcP + " THIS IS " + percent
 				+ " % MORE.              ON TOTAL: " + globalC + "      COWS:  €" + cows$cP + "   PIGS:  €" + pigs$cP
 				+ "   CHICKENS:  €" + chickens$cP);
@@ -392,7 +422,8 @@ public class FarmController {
 		System.out.println("\n\n\n\n\n                                             STARTING SESSION  ");
 		System.out.println(
 				"\n\n______________________________________________________________________________________________________________\n\n");
-
+//____________________________________________________
+//		setting the standard price
 		if (animals.size() == 0) {
 			chickens$ = 0.00;
 			pigs$ = 0.00;
@@ -413,6 +444,7 @@ public class FarmController {
 			}
 		}
 
+//		_________________________________________________
 		for (Animal animal : animals) {
 			System.out.println(animal);
 		}
