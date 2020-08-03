@@ -97,6 +97,7 @@ public class FarmController {
 			animals.add(new Cow(animal.getType(), animal.getWeight(), animal.getId()));
 			cows.add(new Cow(animal.getType(), animal.getWeight(), animal.getId()));
 			animalPost = cow;
+
 			return new SuccessResponse("This " + animalPost + " was successfully added to the system.");
 		} else if (animal.getType().equalsIgnoreCase(pig)) {
 			animals.add(new Pig(animal.getType(), animal.getWeight(), animal.getId()));
